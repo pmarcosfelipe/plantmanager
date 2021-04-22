@@ -1,48 +1,66 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
-  Image,
   Text,
   SafeAreaView,
   StyleSheet,
-  TouchableOpacity,
-  Dimensions,
   View,
   TextInput,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
-import { Feather } from '@expo/vector-icons';
 
-import wateringImage from '../assets/watering.png';
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
 
+import { Button } from '../components/Button';
+
 export function UserIdentification() {
+  const [isFocused, setIsFocused] = useState(false);
+  const [isFilled, setIsFilled] = useState(false);
+  const [name, setName] = useState<string>();
+
+  function handleInputBlur() {
+    setIsFocused(false);
+    setIsFilled(!!name);
+  }
+
+  function handleInputFocus() {
+    setIsFocused(false);
+  }
+
+  function handleInputChange(value: string) {
+    setIsFilled(!!value);
+    setName(value);
+  }
+
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
-        <View style={styles.form}>
-          <Text style={styles.emoji}>😃</Text>
-          <Text style={styles.title}>Como podemos {'\n'} chamar você?</Text>
-          <TextInput style={styles.input} />
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      >
+        <View style={styles.content}>
+          <View style={styles.form}>
+            <View style={styles.header}>
+              <Text style={styles.emoji}>{isFilled ? '😆' : '😃'}</Text>
+              <Text style={styles.title}>Como podemos {'\n'} chamar você?</Text>
+              <TextInput
+                style={[
+                  styles.input,
+                  (isFocused || isFilled) && { borderColor: colors.green },
+                ]}
+                placeholder="Digite o nome"
+                onBlur={handleInputBlur}
+                onFocus={handleInputFocus}
+                onChangeText={handleInputChange}
+              />
+            </View>
+            <View style={styles.footer}>
+              <Button title="Confirmar" />
+            </View>
+          </View>
         </View>
-        {/* <Text style={styles.title}>
-          Gerencie {'\n'} suas plantas de {'\n'} forma fácil
-        </Text>
-
-        <Image
-          source={wateringImage}
-          style={styles.image}
-          redizeMode="contain"
-        />
-
-        <Text style={styles.subtitle}>
-          Não esqueça mais de regar suas plantas. Nós cuidamos de lembrar você
-          sempre que precisar.
-        </Text>
-
-        <TouchableOpacity style={styles.button} activeOpacity={0.7}>
-          <Feather name="chevron-right" style={styles.buttonIcon} />
-        </TouchableOpacity> */}
-      </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
@@ -60,6 +78,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 54,
+  },
+  header: {
+    alignItems: 'center',
   },
   emoji: {
     fontSize: 44,
@@ -83,34 +104,9 @@ const styles = StyleSheet.create({
     padding: 10,
     textAlign: 'center',
   },
-  // wrapper: {
-  //   flex: 1,
-  //   alignItems: 'center',
-  //   justifyContent: 'space-around',
-  //   paddingHorizontal: 20,
-  // },
-
-  // subtitle: {
-  //   fontFamily: fonts.text,
-  //   fontSize: 18,
-  //   textAlign: 'center',
-  //   paddingHorizontal: 20,
-  //   color: colors.heading,
-  // },
-  // image: {
-  //   height: Dimensions.get('window').width * 0.7,
-  // },
-  // button: {
-  //   backgroundColor: colors.green,
-  //   justifyContent: 'center',
-  //   alignItems: 'center',
-  //   borderRadius: 16,
-  //   marginBottom: 10,
-  //   width: 56,
-  //   height: 56,
-  // },
-  // buttonIcon: {
-  //   fontSize: 32,
-  //   color: colors.white,
-  // },
+  footer: {
+    width: '100%',
+    marginTop: 40,
+    paddingHorizontal: 20,
+  },
 });
