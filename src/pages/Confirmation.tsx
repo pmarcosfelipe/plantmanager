@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text, SafeAreaView, StyleSheet, View } from 'react-native';
+import { useNavigation } from '@react-navigation/core';
 
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
@@ -7,6 +8,12 @@ import fonts from '../styles/fonts';
 import { Button } from '../components/Button';
 
 export function Confirmation() {
+  const navigation = useNavigation();
+
+  function handleStart() {
+    navigation.navigate('start');
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
@@ -16,7 +23,7 @@ export function Confirmation() {
           Agora vamos começar a cuidar das suas plantinhas com muito cuidado.
         </Text>
         <View style={styles.footer}>
-          <Button title="Confirmar" />
+          <Button title="Começar" onPress={handleStart} />
         </View>
       </View>
     </SafeAreaView>
