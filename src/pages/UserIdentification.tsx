@@ -29,7 +29,7 @@ export function UserIdentification() {
   }
 
   function handleInputFocus() {
-    setIsFocused(false);
+    setIsFocused(true);
   }
 
   function handleInputChange(value: string) {
