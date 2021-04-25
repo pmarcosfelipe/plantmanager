@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Image,
   ScrollView,
   Platform,
   TouchableOpacity,
   Text,
-  SafeAreaView,
   StyleSheet,
   View,
   Alert,
@@ -16,26 +15,17 @@ import { getBottomSpace } from 'react-native-iphone-x-helper';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { isBefore, format } from 'date-fns';
 
+import { PlantProps, savePlant, loadPlants } from '../libs/storage';
+
+import { Button } from '../components/Button';
+
 import waterdrop from '../assets/waterdrop.png';
 
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
 
-import { Button } from '../components/Button';
-
 interface Params {
-  plant: {
-    id: string;
-    name: string;
-    about: string;
-    water_tips: string;
-    photo: string;
-    environments: [string];
-    frequency: {
-      times: number;
-      repeat_every: string;
-    };
-  };
+  plant: PlantProps;
 }
 
 export function PlantSave() {
@@ -66,6 +56,14 @@ export function PlantSave() {
 
   function handleOpenDatetimePickerForAndroid() {
     setShowDatePicker((oldState) => !oldState);
+  }
+
+  async function handleSave() {
+    try {
+      savePlant({ ...plant, dateTimeNotification: selectedDatetime });
+    } catch (error) {
+      Alert.alert('Não foi possível salvar sua plantinha. 😭');
+    }
   }
 
   return (
@@ -106,7 +104,7 @@ export function PlantSave() {
           </TouchableOpacity>
         )}
 
-        <Button title="Confirmar" onPress={() => {}} />
+        <Button title="Confirmar" onPress={handleSave} />
       </View>
     </View>
   );
