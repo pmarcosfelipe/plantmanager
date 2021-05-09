@@ -17,11 +17,11 @@ interface PlantProps extends RectButtonProps {
   handleRemove: () => void;
 }
 
-export const PlantCardSecondary = ({ data, ...rest }: PlantProps) => {
-  function handleRemove() {
-    console.log('remove');
-  }
-
+export const PlantCardSecondary = ({
+  data,
+  handleRemove,
+  ...rest
+}: PlantProps) => {
   return (
     <Swipeable
       overshootRight={false}
